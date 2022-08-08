@@ -15,6 +15,7 @@ esp.osdebug(None)
 import gc
 gc.collect()
 
+
 def temperature(d):
     d.measure()
     time.sleep(1)
@@ -34,9 +35,10 @@ def web_page(TEMPSTATE, HUMSTATE, UVLIGTH,HOTSPOT,NIGTHHOT):
     return html
 
 def wificonnect():
-    ssid = '********'
+    ssid = '*******'
     password = '*******'
-
+    ap_if = network.WLAN(network.AP_IF)
+    ap_if.active(False)
     station = network.WLAN(network.STA_IF)
 
     station.active(True)
@@ -71,6 +73,9 @@ def controlerligthhot(temp,ligthhot, hour):
             time.sleep(2)
             return "on"
     else:
+        print("desliga a luz de calor")
+        ligthhot.value(0)#desliga a luz
+         time.sleep(2)
         return "off"
         
     
@@ -164,6 +169,7 @@ try:
             print("testrede1")
             lcd.clear()
             lcd.putstr(IP[0])
+            #print(gc.mem_free()+" espaço de memoria free")
             print("testrede1")
             conn, addr = s.accept()
             time.sleep(1)
@@ -205,14 +211,19 @@ try:
                 time.sleep(2)
                 print("test2")
                 lcd.clear()
+                time.sleep(1)
                 lcd.putstr(phrase)
+                time.sleep(1)
                 lcd.clear()
+                time.sleep(1)
                 print(hora)#printa o tempo atualizado
                 times = str(hora[0])+"-"+str(hora[1])+"-"+str(hora[2])+"        "+str(hora[3])+":"+str(hora[4])+":"+str(hora[5])
                 print("test3")
                 lcd.putstr(times)
                 time.sleep(5)
                 print("test4")
+                print(gc.mem_alloc())
+                print(str(gc.mem_free())+" espaço de memoria free")
             except Exception as e:
                 #lcd.putstr(str(e))
                 print(e)
